@@ -1,24 +1,39 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
-import Checkbox from "../components/common/Checkbox";
 import { AuthProps, useAuth } from "@/providers/AuthProvider";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 export default function Login() {
   const { loginWithGoogle, login } = useAuth();
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
     register,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useForm<AuthProps>();
 
+  if (currentUser !== null) {
+    navigate("/", { replace: true });
+  }
   const onSubmit: SubmitHandler<AuthProps> = async (data) => {
-    const { email, password } = data;
-    login(email, password);
+    try {
+      await login(data.email, data.password);
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Failed to login. Check your credentials.");
+    }
   };
 
+  useEffect(() => {
+    if (currentUser !== null) {
+      navigate("/", { replace: true });
+    }
+  }, []);
   return (
     <main className="w-full h-[100dvh] antialiased">
       <div className="w-full h-full flex">
@@ -31,7 +46,9 @@ export default function Login() {
         </section>
         <section className="h-full flex w-full lg:w-[65dvw] items-center justify-center">
           <div className="w-full max-w-md p-8 bg-[#202425] rounded-lg shadow-lg">
-            <h1 className="text-2xl font-sans font-semibold">Sign In</h1>
+            <h1 className="text-xl md:text-2xl font-sans font-semibold">
+              Sign In
+            </h1>
             <form className="mt-4 space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-2">
                 <Input
@@ -49,19 +66,11 @@ export default function Login() {
                   className="w-full"
                 />
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="remember" />
-                  <label
-                    htmlFor="remember"
-                    className="text-sm font-sans font-semibold"
-                  >
-                    Remember me
-                  </label>
-                </div>
+              <div className="flex items-center justify-end">
                 <Link
-                  to="/forgot-password"
-                  className="text-sm font-sans font-semibold text-info transition-colors duration-200 ease-in-out hover:text-info/80"
+                  to="/auth/forgot-password"
+                  target="_blank"
+                  className="md:text-sm text-xs  font-sans font-semibold text-info transition-colors duration-200 ease-in-out hover:text-info/80"
                 >
                   Forgot Password?
                 </Link>

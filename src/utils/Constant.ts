@@ -1,0 +1,1 @@
+export const rtdbUrl = import.meta.env.VITE_RTDB_URL as string;

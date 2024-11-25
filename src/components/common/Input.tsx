@@ -9,7 +9,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         type={type}
-        className={`${className} input input-bordered input-md`}
+        className={`${className} input input-bordered input-sm md:input-md`}
         {...rest}
       />
     );

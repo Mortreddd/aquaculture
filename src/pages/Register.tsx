@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "@/components/common/Button";
 import Input from "@/components/common/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -11,18 +11,24 @@ interface RegisterProps extends AuthProps {
 export default function Register() {
   const {
     handleSubmit,
-    register,
-    reset,
+    register: _register,
+
     watch,
-    formState: { isSubmitSuccessful, isSubmitting, errors },
+    formState: { isSubmitting, errors },
   } = useForm<RegisterProps>();
   const password = watch("password");
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
-  const { login, loginWithGoogle } = useAuth();
+  if (currentUser !== null) {
+    navigate("/", { replace: true });
+  }
+
+  const { register, loginWithGoogle } = useAuth();
 
   const onSubmit: SubmitHandler<RegisterProps> = async (data) => {
     const { email, password } = data;
-    login(email, password);
+    await register(email, password);
   };
 
   return (
@@ -48,7 +54,7 @@ export default function Register() {
               <div className="space-y-2">
                 <Input
                   type="email"
-                  {...register("email", {
+                  {..._register("email", {
                     required: "Email is required",
                     pattern: {
                       value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
@@ -65,7 +71,7 @@ export default function Register() {
               <div className="space-y-2">
                 <Input
                   type="password"
-                  {...register("password", {
+                  {..._register("password", {
                     required: "Password is required",
                     minLength: {
                       value: 8,
@@ -83,7 +89,7 @@ export default function Register() {
                 <Input
                   type="password"
                   placeholder="Confirm Password"
-                  {...register("confirmPassword", {
+                  {..._register("confirmPassword", {
                     required: "Confirm your password",
                     validate: (value) =>
                       value === password || "Passwords do not match",
@@ -103,7 +109,7 @@ export default function Register() {
                   loading={isSubmitting}
                   className="w-full"
                 >
-                  Sign Up
+                  Register
                 </Button>
               </div>
             </form>
