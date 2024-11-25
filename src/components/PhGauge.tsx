@@ -49,7 +49,7 @@ export default function PhGauge() {
           fill: `${color}`,
         },
       })}
-      text={({ valueMax }) => `${data} pH`}
+      text={({}) => `${data} pH`}
     />
   );
 }

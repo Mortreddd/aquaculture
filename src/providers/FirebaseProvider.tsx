@@ -19,18 +19,6 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID as string,
 };
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAUcZ7oWo0zi1DUpv2mu2uaY-nXvrPqYAs",
-//   authDomain: "aquaculture-e24d3.firebaseapp.com",
-//   databaseURL: "https://aquaculture-e24d3-default-rtdb.firebaseio.com",
-//   projectId: "aquaculture-e24d3",
-//   storageBucket: "aquaculture-e24d3.firebasestorage.app",
-//   messagingSenderId: "64287061608",
-//   appId: "1:64287061608:web:54fe6655894d57734e6ddd",
-//   measurementId: "G-TLVEPDYBQ1",
-// };
-
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);

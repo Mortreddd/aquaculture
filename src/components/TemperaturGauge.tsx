@@ -35,7 +35,7 @@ export default function TemperatureGauge() {
       endAngle={110}
       valueMax={maxValue}
       valueMin={minValue}
-      sx={(theme) => ({
+      sx={() => ({
         width: "100%",
         height: "100%",
         [`& .${gaugeClasses.valueText}`]: {
