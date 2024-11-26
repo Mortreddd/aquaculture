@@ -3,24 +3,24 @@ import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 export default function TemperatureGauge() {
+  const blue = "#3b82f6";
   const red = "#dc2626";
-  const purple = "#a855f7";
   const green = "#16a34a";
   const maxValue = 70;
   const minValue = 0;
   const [data, setData] = useState<number>(0);
-  const [color, setColor] = useState<string>(green);
+  const [color, setColor] = useState<string>(blue);
   useEffect(() => {
-    const dbRef = ref(database, "WaterSensor/SensorValues/Temperature");
+    const dbRef = ref(database, "Sensors/Temperature");
     return onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
-
+      console.log(data);
       if (snapshot.exists()) {
         setData(snapshot.val());
         if (data < 25) {
-          setColor(red);
+          setColor(blue);
         } else if (data > 30) {
-          setColor(purple);
+          setColor(red);
         } else {
           setColor(green);
         }

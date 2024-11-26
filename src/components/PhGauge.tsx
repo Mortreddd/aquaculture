@@ -11,7 +11,7 @@ export default function PhGauge() {
   const [data, setData] = useState<number>(0);
   const [color, setColor] = useState<string>(green);
   useEffect(() => {
-    const dbRef = ref(database, "WaterSensor/SensorValues/pH");
+    const dbRef = ref(database, "Sensors/pH");
     return onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
 

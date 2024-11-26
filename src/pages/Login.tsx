@@ -16,9 +16,12 @@ export default function Login() {
     formState: { isSubmitting },
   } = useForm<AuthProps>();
 
-  if (currentUser !== null) {
-    navigate("/", { replace: true });
-  }
+  useEffect(() => {
+    if (currentUser !== null) {
+      navigate("/", { replace: true });
+    }
+  }, [currentUser]);
+
   const onSubmit: SubmitHandler<AuthProps> = async (data) => {
     try {
       await login(data.email, data.password);
@@ -29,11 +32,6 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    if (currentUser !== null) {
-      navigate("/", { replace: true });
-    }
-  }, []);
   return (
     <main className="w-full h-[100dvh] antialiased">
       <div className="w-full h-full flex">

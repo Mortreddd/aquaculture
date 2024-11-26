@@ -27,7 +27,7 @@ export default function Drawer({ children }: PropsWithChildren) {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-[#33CBB6] text-base-content min-h-full w-96 p-5 gap-2">
+        <ul className="menu bg-[#33CBB6] text-base-content min-h-full w-72 p-5 gap-2">
           {/* Sidebar content here */}
           <li>
             <DrawerLink to={"/"}>Home</DrawerLink>

@@ -4,25 +4,25 @@ import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 export default function TurbidityGauge() {
   const red = "#dc2626";
-  const purple = "#a855f7";
-  const blue = "#60a5fa";
+  const yellow = "#eab308";
+  const green = "#16a34a";
   const maxValue = 50;
   const minValue = 0;
   const [data, setData] = useState<number>(0);
-  const [color, setColor] = useState<string>(blue);
+  const [color, setColor] = useState<string>(green);
   useEffect(() => {
-    const dbRef = ref(database, "WaterSensor/SensorValues/Turbidity");
+    const dbRef = ref(database, "Sensors/Turbidity");
     return onValue(dbRef, (snapshot) => {
       const data = snapshot.val();
 
       if (snapshot.exists()) {
         setData(snapshot.val());
-        if (data < 30) {
-          setColor(red);
-        } else if (data > 35) {
-          setColor(purple);
+        if (data <= 29) {
+          setColor(green);
+        } else if (data >= 30 && data <= 35) {
+          setColor(yellow);
         } else {
-          setColor(blue);
+          setColor(red);
         }
       }
     });
