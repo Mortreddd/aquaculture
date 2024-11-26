@@ -14,7 +14,7 @@ export default function Home() {
     if (currentUser === null) {
       navigate("/auth/login", { replace: true });
     }
-  }, []);
+  }, [currentUser]);
 
   return (
     <main className="w-full antialiased h-full">

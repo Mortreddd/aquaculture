@@ -49,7 +49,7 @@ export default function TemperatureGauge() {
           fill: `${color}`,
         },
       })}
-      text={() => `${data} Temp`}
+      text={() => `${data} °C`}
     />
   );
 }
