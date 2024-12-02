@@ -5,16 +5,37 @@ import PhGauge from "@/components/PhGauge";
 import TemperatureGauge from "@/components/TemperaturGauge";
 import TurbidityGauge from "@/components/TurbidityGauge";
 import { useEffect } from "react";
+import { messaging } from "@/providers/FirebaseProvider";
+import { getToken } from "firebase/messaging";
 
 export default function Home() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-
+  const vapidKey = import.meta.env.VITE_VAPID_KEY as string;
   useEffect(() => {
     if (currentUser === null) {
       navigate("/auth/login", { replace: true });
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    const requestNotificationPermission = async () => {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          const token = await getToken(messaging, {
+            vapidKey: vapidKey,
+          });
+          console.log(token);
+          localStorage.setItem("fcmToken", token);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    requestNotificationPermission();
+  }, [vapidKey]);
 
   return (
     <main className="w-full antialiased h-full">

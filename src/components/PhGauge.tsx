@@ -1,6 +1,8 @@
 import { database } from "@/providers/FirebaseProvider";
+import { hasNotificationPermission } from "@/utils/Permissions";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { onValue, ref } from "firebase/database";
+import logo from "@/assets/logo.png";
 import { useEffect, useState } from "react";
 export default function PhGauge() {
   const red = "#dc2626";
@@ -10,6 +12,9 @@ export default function PhGauge() {
   const minValue = 0;
   const [data, setData] = useState<number>(0);
   const [color, setColor] = useState<string>(green);
+
+  const phValue = Math.floor(data * 100) / 100;
+  // const phValue = Math.floor(data).toFixed(1);
   useEffect(() => {
     const dbRef = ref(database, "Sensors/pH");
     return onValue(dbRef, (snapshot) => {
@@ -19,14 +24,31 @@ export default function PhGauge() {
         setData(snapshot.val());
         if (data < 6.5) {
           setColor(red);
+          sendNotification(
+            "Low pH Alert!",
+            `The pH level dropped to ${data.toFixed(2)}.`
+          );
         } else if (data > 9) {
           setColor(purple);
+          sendNotification(
+            "High pH Alert!",
+            `The pH level rose to ${data.toFixed(2)}.`
+          );
         } else {
           setColor(green);
         }
       }
     });
   }, []);
+
+  function sendNotification(title: string, message: string) {
+    if (hasNotificationPermission()) {
+      new Notification(title, {
+        body: message,
+        icon: logo,
+      });
+    }
+  }
 
   return (
     <Gauge
@@ -49,7 +71,7 @@ export default function PhGauge() {
           fill: `${color}`,
         },
       })}
-      text={({}) => `${data} pH`}
+      text={({}) => `${phValue.toFixed(2)} pH`}
     />
   );
 }
